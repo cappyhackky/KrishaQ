@@ -1,10 +1,11 @@
 import { Metadata } from "next";
-import Form from "./Form";
+import Form from "../shipping/Form";
 
 export const metadata: Metadata = {
-  title: "Sign In",
+  title: "Shipping",
 };
-const Signin = () => {
+
+const Shipping = () => {
   return (
     <>
       <Form />
@@ -12,4 +13,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Shipping;
