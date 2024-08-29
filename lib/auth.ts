@@ -12,6 +12,8 @@ export const config = {
         password: { type: "password" },
       },
       async authorize(credentials) {
+        console.log("Inside Authorize");
+        
         await dbConnect();
         if (credentials == null) return null;
         const user = await UserModel.findOne({ email: credentials.email });
@@ -42,34 +44,39 @@ export const config = {
         /\/profile/,
         /\/order\/{.*}/,
         /\/admin/,
+        /\/vendor/,
       ];
       const { pathname } = request.nextUrl;
       if (protectedPaths.some((p) => p.test(pathname))) return !!auth;
       return true;
     },
     async jwt({ user, trigger, session, token }: any) {
+      console.log("Inside JWT");
       if (user) {
+        console.log("before setting token", token);
+        token = null
         token.user = {
-          _id: user._id,
-          email: user.email,
-          name: user.name,
-          isAdmin: user.isAdmin,
+          email: user.email
         };
       }
       if (trigger === "update" && session) {
         token.user = {
-          ...token.user,
-          email: session.user.email,
-          name: session.user.name,
+          email: session.user.email
         };
       }
-      return token;
+      // console.log("After setting token: ",token);
+      
+      return null;
     },
     session: async ({ session, token }: any) => {
+      console.log('Session: ' + session + "\nToken: " + token);
+      
       if (token) {
         session.user = token.user;
       }
-      return session;
+      console.log("Session : " + session);
+      
+      return null;
     },
   },
 };

@@ -1,14 +1,13 @@
 "use client";
-
 import { OrderItem } from "@/lib/Models/OrderModel";
-import { useSession } from "next-auth/react";
+import { AuthContext } from "@/lib/Providers/AuthProvider";
+import { useContext } from "react";
 import useSWR from "swr";
 
 const OrderDetails = ({ orderId }: { orderId: string }) => {
-  const { data: session } = useSession();
   const { data: order, error } = useSWR(`/api/orders/${orderId}`);
   if (error) return error.message;
-  if (!order) return <>Loading....</>;
+  if (!order) return <div className="flex h-full justify-center items-center mt-32"><span className="text-lime-600 loading loading-lg loading-dots"></span></div>
   const {
     shippingAddress,
     items,
@@ -65,7 +64,7 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
                       <th>Price</th>
                     </tr>
                   </thead>
-                  <tbody> 
+                  <tbody>
                     {items.map((item: OrderItem) => (
                       <tr key={item.sku}>
                         <td>
@@ -73,7 +72,11 @@ const OrderDetails = ({ orderId }: { orderId: string }) => {
                             href={`/product/${item.sku}`}
                             className="flex items-center"
                           >
-                            <img className="w-16 drop-shadow-lg" src={item.image} alt={item.name} />
+                            <img
+                              className="w-16 drop-shadow-lg"
+                              src={item.image}
+                              alt={item.name}
+                            />
                           </a>
                         </td>
                         <td>{item.qty}</td>

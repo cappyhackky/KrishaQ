@@ -19,9 +19,9 @@ const AddToCart = ({ item }: { item: OrderItem }) => {
   return (
     existItem ? (
       <div className="flex items-center justify-between w-2/3 mx-auto border">
-        <button className="btn rounded btn-primary text-2xl" type="button" onClick={()=>{decrease(existItem)}}>-</button>
+        <button className="btn rounded bg-lime-500 border-0 text-white hover:bg-lime-600 text-2xl" type="button" onClick={()=>{decrease(existItem)}}>-</button>
         <span>{existItem.qty}</span>
-        <button className="btn rounded btn-primary text-2xl" type="button" onClick={()=>{increase(existItem)}}>+</button>
+        <button className="btn rounded bg-lime-500 border-0 text-white hover:bg-lime-600 text-2xl" type="button" onClick={()=>{increase(existItem)}}>+</button>
       </div>) : (
       <button className="btn w-full bg-lime-600 text-lg border-0 text-white hover:bg-lime-700" type="button" onClick={addToCartHandler}>Add to Cart</button>)
   )

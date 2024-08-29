@@ -25,26 +25,20 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <Link href="/" >Home</Link>
+      <a className="btn btn-lg round ed-sm rounded-r-full bg-lime-500 border-0 text-white hover:bg-lime-600" href="/" >Home</a>
       <div className="grid md:grid-cols-4 md:gap-4">
         <div className="md:col-span-2 mx-auto">
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            width={640}
-            height={640}
-          />
+          <img src={product.images[0]} alt={product.title} width={400} height={400} />
         </div>
         <div className="flex items-center">
           <div className="">
             <h1 className="text-4xl">{product.title}</h1>
-            <p className="text-slate-400">{product.brand}</p>
             <div className="flex gap-2">
               <span className="text-yellow-600"><BiStar /></span>
               <span className="text-sm">{product.rating} | {product.reviews.length} Reviews</span>
             </div>
             <div className="divider"></div>
-            <div className="text-4xl">${product.price}</div>
+            <div className="text-4xl">₹ {product.price}</div>
             <p className="text-lg text-justify">{product.description}</p>
           </div>
         </div>
@@ -53,7 +47,7 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
             <div className="card-body">
               <div className="flex justify-between text-3xl">
                 <div>Price</div>
-                <div>$ {product.price}</div>
+                <div>₹ {product.price}</div>
               </div>
               <div className="flex justify-between text-xl">
                 <div>Status</div>
@@ -66,7 +60,7 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto p-8 md:p-16 md:px-32">
+      {/* <div className="container mx-auto p-8 md:p-16 md:px-32">
         {product.reviews.length > 0 ?
           <>
             {product.reviews.map((review, i) => (
@@ -98,7 +92,7 @@ const ProductDetail = async ({ params }: { params: { id: string } }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
     </>
   )

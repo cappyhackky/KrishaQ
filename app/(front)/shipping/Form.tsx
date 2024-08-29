@@ -16,24 +16,29 @@ const From = () => {
     formState: { errors, isSubmitting },
   } = useForm<ShippingAddress>({
     defaultValues: {
-      fullName: "",
-      address: "",
-      city: "",
-      pinCode: "",
-      country: "",
+      fullName: shippingAddress?.fullName || "",
+      address: shippingAddress?.address || "",
+      city: shippingAddress?.city || "",
+      pinCode: shippingAddress?.pinCode || "",
+      country: shippingAddress?.country || "",
     },
   });
+
   useEffect(() => {
-    setValue("fullName", shippingAddress.fullName);
-    setValue("address", shippingAddress.address);
-    setValue("city", shippingAddress.city);
-    setValue("pinCode", shippingAddress.pinCode);
-    setValue("country", shippingAddress.country);
+    if (shippingAddress) {
+      setValue("fullName", shippingAddress.fullName);
+      setValue("address", shippingAddress.address);
+      setValue("city", shippingAddress.city);
+      setValue("pinCode", shippingAddress.pinCode);
+      setValue("country", shippingAddress.country);
+    }
   }, [setValue, shippingAddress]);
+
   const formSubmit: SubmitHandler<ShippingAddress> = async (form) => {
     saveShippingAddress(form);
     router.push('/payment');
   };
+
   const FormInput = ({
     id,
     name,
@@ -46,13 +51,8 @@ const From = () => {
     pattern?: ValidationRule<RegExp>;
   }) => (
     <div className="my-2">
-      <label htmlFor={id} className="label">
-        {name}
-      </label>
-      <input
-        type="text"
-        id={id}
-        className="input input-bordered w-full"
+      <label htmlFor={id} className="label">{name}</label>
+      <input type="text" id={id} className="input rounded-sm input-bordered w-full"
         {...register(id, {
           required: required && `${name} is required!`,
           pattern,
@@ -78,17 +78,8 @@ const From = () => {
               <FormInput name="Pin Code" id="pinCode" required />
               <FormInput name="Country" id="country" required />
             </div>
-            <div className="my-2">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn btn-primary w-full"
-              >
-                {isSubmitting && (
-                  <span className="loading loading-spinner"></span>
-                )}
-                Next
-              </button>
+            <div className="my-2 text-center">
+              <button type="submit" disabled={isSubmitting} className="btn bg-lime-500 border-0 text-white hover:bg-lime-600 w-1/2 rounded-sm">{isSubmitting && (<span className="loading loading-spinner"></span>)}Next</button>
             </div>
           </form>
         </div>

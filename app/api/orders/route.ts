@@ -1,4 +1,3 @@
-import { auth } from "@/lib/auth";
 import dbConnect from "@/lib/dbConnect";
 import OrderModel, { OrderItem } from "@/lib/Models/OrderModel";
 import ProductModel from "@/lib/Models/ProductModel";
@@ -14,13 +13,16 @@ const calcPrice = (orderItems: OrderItem[]) => {
   return { itemsPrice, shippingPrice, taxPrice, totalPrice };
 };
 
-export const POST = auth(async (req: any) => {
-  if (!req.auth) {
-    return Response.json({ message: "Unautorised Access" }, { status: 401 });
-  }
-  const { user } = req.auth;
+export const POST = async (req: any) => {
   try {
+    
     const payload = await req.json();
+    console.log(payload);
+    
+    if (!payload.user) {
+      return Response.json({ message: "Unauthorised Access" }, { status: 401 });
+    }
+
     await dbConnect();
     const dbProductPrices = await ProductModel.find(
       {
@@ -28,15 +30,17 @@ export const POST = auth(async (req: any) => {
       },
       "price"
     );
-    const dbOrderItems = payload.items.map((x: { _id: string, images:string[], title:string }) => ({
-      ...x,
-      product: x._id,
-      name:x.title,
-      price: dbProductPrices.find((x) => x._id === x._id).price,
-      _id: undefined,
-      image:x.images[0]
-    }));
-    
+    const dbOrderItems = payload.items.map(
+      (x: { _id: string; images: string[]; title: string }) => ({
+        ...x,
+        product: x._id,
+        name: x.title,
+        price: dbProductPrices.find((x) => x._id === x._id).price,
+        _id: undefined,
+        image: x.images[0],
+      })
+    );
+
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
       calcPrice(dbOrderItems);
     const newOrder = new OrderModel({
@@ -47,7 +51,7 @@ export const POST = auth(async (req: any) => {
       totalPrice,
       shippingAddress: payload.shippingAddress,
       paymentMethod: payload.paymentMethod,
-      user: user._id,
+      user: payload.user,
     });
     const createOrder = await newOrder.save();
     return Response.json(
@@ -57,4 +61,4 @@ export const POST = auth(async (req: any) => {
   } catch (error: any) {
     return Response.json({ message: error.message }, { status: 500 });
   }
-});
+};

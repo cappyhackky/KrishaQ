@@ -42,21 +42,19 @@ const HomeCarousel = () => {
 
     return () => clearInterval(interval); // Cleanup the interval on component unmount
   }, [transitioning]);
-
-
   return (
-    <div className="relative w-full overflow-hidden p-1 my-5">
-      <div className="relative h-64">
+    <div className="relative w-full overflow-hidden my-3 p-2">
+      <div className="relative h-64 md:h-96">
         {carousel_images.map((img, index) => (
-          <div key={img.img_id} className={`absolute inset-0 transition-opacity ease-in-out ${ index === currentIndex ?  'opacity-100 z-10' : 'opacity-0 z-0'}`} >
-            <img src={img.img_url} className="w-full h-full object-cover" alt={`Slide ${index + 1}`} />
+          <div key={index} className={`absolute inset-0 transition-opacity ease-in-out ${ index === currentIndex ?  'opacity-100 z-10' : 'opacity-0 z-0'}`} >
+            <img src={img.img_url} className="w-full h-full object-scale-down" alt={`Slide ${index + 1}`} />
           </div>
         ))}
       </div>
-      <div className="absolute flex justify-between transform -translate-y-1/2 left-0 right-0 top-1/2 px-4 z-20">
-        <button onClick={handlePrevClick} className="btn btn-circle bg-white bg-opacity-50 text-black hover:bg-gray-200 border-none" > ❮ </button>
-        <button onClick={handleNextClick} className="btn btn-circle bg-white bg-opacity-50 text-black hover:bg-gray-200 border-none" > ❯ </button>
-      </div>
+      {/* <div className="absolute flex justify-between transform -translate-y-1/2 left-0 right-0 top-1/2 px-2 z-20">
+        <button onClick={handlePrevClick} className="btn md:ms-12 py-12 bg-white bg-opacity-50 text-black hover:bg-gray-200 border-none" > ❮ </button>
+        <button onClick={handleNextClick} className="btn md:me-12 py-12 bg-white bg-opacity-50 text-black hover:bg-gray-200 border-none" > ❯ </button>
+      </div> */}
     </div>
   );
 };

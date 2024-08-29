@@ -6,19 +6,14 @@ const ProductCard = ({ product }: { product: Product }) => {
   return (
     <>
       <div key={product.sku} className="p-4">
-        <div className="card glass bg-yellow-500">
-          <div className="indicator w-60 bg-white rounded m-8 mb-0 pb-0">
-            <span className="indicator-item badge badge-primary p-2 text-xs">
-              New
-            </span>
-            <Link href={`products/${product.sku}`}>
-              <figure>
-                <img
-                  className="transition-all ease-in-out duration-500 hover:scale-110 aspect-square object-scale-down"
-                  src={product.images[0]}
-                  alt="car!"
-                />
-              </figure>
+        <div className="card glass bg-white rounded-sm">
+          <div className="w-60 bg-white rounded m-8 mb-0 p-4">
+            <Link href={`/products/${product.sku}`}>
+              <img
+                className="w-fit transition-all ease-in-out duration-500 hover:scale-105 aspect-square object-scale-down"
+                src={product.images[0]}
+                alt={product.title}
+              />
             </Link>
           </div>
           <div className="card-body mt-0">
@@ -28,12 +23,14 @@ const ProductCard = ({ product }: { product: Product }) => {
                 : product.title}
             </h2>
             <p className="text-xs">
-              {product.description.length > 75
-                ? product.description.substring(0, 75) + "..."
+              {product.description.length > 30
+                ? product.description.substring(0, 27) + "..."
                 : product.description}
             </p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Add to Cart</button>
+            <div className="card-actions border-t-2 border-lime-500 py-2">
+              <Link href={`/products/${product.sku}`} className="w-full">
+                <button className="btn w-full bg-lime-500 border-0 text-white hover:bg-lime-600 rounded-sm">View Details</button>
+              </Link>
             </div>
           </div>
         </div>

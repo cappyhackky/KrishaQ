@@ -1,12 +1,14 @@
 "use client";
 import CheckOutSteps from "@/Components/CheckOutSteps";
 import useCartService from "@/lib/Hooks/useCartStore";
+import { AuthContext } from "@/lib/Providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWRMutation from "swr/mutation";
 
 const Form = () => {
+  const {user} = useContext(AuthContext) as any;
   const router = useRouter();
   const {
     paymentMethod,
@@ -27,6 +29,7 @@ const Form = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          user: user._id,
           paymentMethod,
           shippingAddress,
           items,
@@ -42,7 +45,6 @@ const Form = () => {
       if (res.ok) {
         clear();
         toast.success("Order placed successfully!!!");
-        // return router.push(`/order/${data.order._id}`);
         return router.push(`/order-history`);
       } else {
         toast.error("Somethinng went wrong at place-order!");
@@ -66,8 +68,8 @@ const Form = () => {
   return (
     <>
       <CheckOutSteps current={3} />
-      <div className="grid md:grid-cols-4 md:gap-4 my-4">
-        <div className="overflow-x-auto md:col-span-3">
+      <div className="grid md:grid-cols-4 md:gap-4 m-4">
+        <div className="grid gap-4 md:col-span-3">
           <div className="card bg-fuchsia-100">
             <div className="card-body">
               <h2 className="card-title">Shipping Address</h2>
@@ -109,8 +111,8 @@ const Form = () => {
                           href={`/product/${item.sku}`}
                           className="flex-items-center"
                         >
-                          {/* <img src={`${item.thumbnail}`} alt={item.name} /> */}
-                          {item.name}
+                          {item.title}
+                          vendor {item.vendor}
                         </a>
                       </td>
                       <td>{item.qty}</td>
@@ -157,7 +159,7 @@ const Form = () => {
                 </li>
                 <li>
                   <button
-                    className="btn btn-primary w-full"
+                    className="btn rounded-sm bg-lime-500 border-0 text-white hover:bg-lime-600 w-full"
                     onClick={() => {placeOrder()}}
                     disabled={isPlacing}
                   >

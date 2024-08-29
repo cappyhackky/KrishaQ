@@ -10,11 +10,11 @@ const ClientProviders = ({ children }: { children: React.ReactNode }) => {
     cartStore.persist.rehydrate();
   };
   useEffect(() => {
-    document.addEventListener('visibilitychange', updateStore);
-    window.addEventListener('focus',updateStore)
+    document.addEventListener("visibilitychange", updateStore);
+    window.addEventListener("focus", updateStore);
     return () => {
-      document.removeEventListener('visibilitychange',updateStore);
-      window.removeEventListener('focus',updateStore)
+      document.removeEventListener("visibilitychange", updateStore);
+      window.removeEventListener("focus", updateStore);
     };
   }, []);
   return (

@@ -26,7 +26,8 @@ const From = () => {
         <h2 className="card-title text-center w-full p-4">Payment Method</h2>
         <div className="card-body">
           <form className="form" onSubmit={handleSubmit}>
-            {['UPI', 'Cash on Delivery'].map((payment)=>(
+            {['Cash on Delivery'].map((payment)=>(
+            // {['UPI', 'Cash on Delivery'].map((payment)=>(
                 <div key={payment}>
                     <label className="label cursor-pointer">
                         <span className="label-text">{payment}</span>
@@ -37,14 +38,14 @@ const From = () => {
             <div className="my-2 grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
                 type="submit"
-                className="btn btn-success w-full"
+                className="btn rounded-sm shadoe border-lime-500 border-0 text-lime-500 hover:bg-lime-600 hover:text-white w-full"
                 onClick={()=>{router.back()}}
               >
                 Back
               </button>
               <button
                 type="submit"
-                className="btn btn-primary w-full"
+                className="btn rounded-sm bg-lime-500 border-0 text-white hover:bg-lime-600 w-full"
               >
                 Next
               </button>

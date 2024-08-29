@@ -19,6 +19,11 @@ const orderSchema = new mongoose.Schema(
         qty: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
+        vendor: { 
+          type: mongoose.Schema.Types.ObjectId, 
+          ref: 'User', 
+          required: true 
+        },
       },
     ],
     shippingAddress: {
@@ -76,10 +81,11 @@ export type Order = {
 export type OrderItem = {
   _id: string;
   sku: string;
-  name: string;
+  title: string;
   qty: number;
-  image: string;
+  images: string[];
   price: number;
+  vendor:string;
 };
 
 export type ShippingAddress = {

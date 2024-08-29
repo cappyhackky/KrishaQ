@@ -1,15 +1,13 @@
 import mongoose from "mongoose";
 
-// Define the mongoose schema for Product
 const productSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   category: { type: String, required: true },
   isFeatured: { type: Boolean, required: true, default:false },
   price: { type: Number, required: true },
-  rating: { type: Number, required: true },
+  rating: { type: Number, required: true, default:0 },
   stock: { type: Number, required: true },
-  brand: { type: String, required: true },
   sku: { type: String, required: true },
   reviews: {
     type: [{
@@ -19,11 +17,14 @@ const productSchema = new mongoose.Schema({
       reviewerName: { type: String, required: true },
       reviewerEmail: { type: String, required: true }
     }],
-    required: true
+    required: false
   },
-  returnPolicy: { type: String, required: true },
   images: { type: [String], required: true },
-  thumbnail: { type: String, required: true }
+  vendor: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  }
 },
 {
   timestamps: true
@@ -50,11 +51,10 @@ export type Product = {
   price: number
   rating: number
   stock: number
-  brand: string
-  sku: string,
+  sku: string
   reviews: Review[]
-  returnPolicy : string
   images: string[]
   thumbnail: string
+  vendor:string
 }
 

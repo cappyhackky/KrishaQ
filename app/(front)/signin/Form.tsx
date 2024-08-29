@@ -1,8 +1,9 @@
 'use client'
-import { signIn, useSession } from "next-auth/react";
+import { AuthContext } from "@/lib/Providers/AuthProvider";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type Inputs = {
   email: string;
@@ -10,7 +11,7 @@ type Inputs = {
 };
 
 const Form = () => {
-  const { data: session } = useSession();
+  const { user, login } = useContext(AuthContext) as any;
   const params = useSearchParams();
   let callbackUrl = params.get("callbackUrl") || "/";
   const router = useRouter();
@@ -25,16 +26,31 @@ const Form = () => {
     },
   });
   useEffect(() => {
-    if (session && session.user) {
+    if (user) {
       router.push(callbackUrl);
     }
-  }, [callbackUrl, params, router, session]);
+  }, [user, callbackUrl, params, router]);
   const formSubmit: SubmitHandler<Inputs> = async (form) =>{
     const {email, password} = form
-    signIn('credentials',{
-        email,
-        password,
-    })
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (res.ok) {
+        const data = await res.json()
+        login(data.jwtToken, data.userProfile);
+      } else {
+        const data = await res.json();
+        throw new Error(data.message);
+      }
+    } catch (err: any) {
+      const error = err.message 
+      toast.error(error || "Some error occured!");
+    }
   }
   
   return(
@@ -43,23 +59,11 @@ const Form = () => {
       <h2 className="card-title text-center w-full">
         Sign In
       </h2>
-      {params.get('error') && (
-          <div className="alert text-error">
-            {params.get('error') === 'Configuration'?
-            'Invalid Email or Password'
-            :
-            params.get('error')
-            }
-          </div>
-        )}
-        {params.get('success') && (
-          <div className="alert text-success">{params.get('success')}</div>
-          )}
       <div className="card-body">
         <form className="form" onSubmit={handleSubmit(formSubmit)}>
           <div className="my-2">
             <label htmlFor="email" className="label">Email</label>
-            <input type="text" className="input input-bordered w-full"
+            <input type="text" className="input rounded-sm input-bordered w-full"
             { ...register('email',{
               required:"E-mail is required",
               pattern:{
@@ -73,7 +77,7 @@ const Form = () => {
           </div>
           <div className="my-2">
             <label htmlFor="email" className="label">Password</label>
-            <input type="password" className="input input-bordered w-full"
+            <input type="password" className="input rounded-sm input-bordered w-full"
             { ...register('password',{
               required:"Password is required",
             })} />
@@ -82,16 +86,12 @@ const Form = () => {
             )}
           </div>
           <div className="my-4">
-            <button className="btn btn-primary w-full" type="submit">
-            {isSubmitting && (
-              <span className="loading loading-spinner"></span>
-            )}
-            Sign In
-            </button>
+            <button className="btn  bg-lime-500 border-0 text-white hover:bg-lime-600 rounded-sm w-full" type="submit">
+            {isSubmitting && (<span className="loading loading-spinner"></span>)}Sign In</button>
           </div>
           <div className="divider"></div>
             <div className="text-center">
-              Not Registered? <a className="text-primary underline" href={`/register?callbackUrl=${callbackUrl}`}><span>Register Now</span></a>
+              Not Registered? <a className="text-lime-600 underline" href={`/register?callbackUrl=${callbackUrl}`}><span>Register Now</span></a>
             </div>
         </form>
       </div>

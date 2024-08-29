@@ -4,7 +4,7 @@ const page = () => {
   return (
     <>
       <div className="bg-lime-500 text-white text-right text-4xl p-8">Contact Us</div>
-      <div className="text-2xl p-16 px-40 bg-lime-100">
+      <div className="text-xl p-16 px-40 bg-lime-100">
         <p>
           Contact Information
           <br /><br />
